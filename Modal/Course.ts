@@ -5,7 +5,7 @@ export interface isCourse extends Document {
   courseName: string;
   courseCode: string;
   description: string;
-  duration: string;
+  
 }
 
 const courseSchema: Schema<isCourse> = new Schema(
@@ -22,10 +22,7 @@ const courseSchema: Schema<isCourse> = new Schema(
       type: String,
       required: true,
     },
-    duration: {
-      type: String,
-      required: true,
-    },
+     
   },
   { timestamps: true }
 );

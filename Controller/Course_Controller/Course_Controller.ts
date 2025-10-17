@@ -12,9 +12,9 @@ export const HandleCourseAdd = async (req: Request, res: Response) => {
       });
     }
 
-    const { courseName, courseCode, description, duration } = req.body;
+    const { courseName, courseCode, description  } = req.body;
 
-    if (!courseName || !courseCode || !description || !duration) {
+    if (!courseName || !courseCode || !description ) {
       return res.status(400).json({
         success: false,
         message: "all field requuried",
@@ -25,7 +25,7 @@ export const HandleCourseAdd = async (req: Request, res: Response) => {
       courseName,
       courseCode,
       description,
-      duration,
+       
     });
 
     if (!courseCreate) {
@@ -96,11 +96,11 @@ export const HandleCourseEdit = async (req: Request, res: Response) => {
     }
 
     const { courseId } = req.params;
-    const { courseName, courseCode, description, duration } = req.body;
+    const { courseName, courseCode, description } = req.body;
 
     const EditCourse = await Course.findByIdAndUpdate(
       courseId,
-      { courseName, courseCode, description, duration },
+      { courseName, courseCode, description  },
       { new: true }
     );
 
