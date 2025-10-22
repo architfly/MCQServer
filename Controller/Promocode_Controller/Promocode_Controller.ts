@@ -1,45 +1,48 @@
 import { RequestHandler } from "express";
 import PromoCode from "../../Modal/Promocode";
 
+
+
+
 export const HandlePromocodeCreate: RequestHandler = async (req, res) => {
   try {
-    const { code, discount, validTill, inActive } = req.body;
+    const { code, discount, validTill, isActive } = req.body; // ✅ Changed inActive to isActive
 
-
-    // if (!code || !discount || !validTill || !inActive) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "all data complete it",
-    //   });
-    // }
-
-    const PromoCodeALways = await PromoCode.create({
-      code,
-      discount,
-      validTill,
-      inActive,
-    });
-
-    if (!PromoCodeALways) {
+    if (!code || !discount || !validTill) {
       return res.status(400).json({
         success: false,
-        message: "Prcomcode is inavlid",
+        message: "Code, discount, and validTill are required",
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      message: "Promocode is Succesffuly created",
-      data: PromoCodeALways,
+    const newPromoCode = await PromoCode.create({
+      code: code.toUpperCase(),
+      discount,
+      validTill: new Date(validTill),
+      isActive: isActive !== undefined ? isActive : true, // ✅ Use isActive
     });
-  } catch (error) {
-    console.log("HandkePromocode", error);
+
+    return res.status(201).json({
+      success: true,
+      message: "Promocode created successfully",
+      data: newPromoCode,
+    });
+  } catch (error: any) {
+    console.log("HandlePromocodeCreate error:", error);
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "Promo code already exists",
+      });
+    }
     return res.status(500).json({
       success: false,
-      message: "error in the Handkeprmocde",
+      message: "Error creating promocode",
     });
   }
 };
+
+
 
 export const HandlePromocodeGet: RequestHandler = async (req, res) => {
   try {
@@ -149,3 +152,60 @@ export const HandlePromoCodeDelete: RequestHandler = async (req, res) => {
     });
   }
 };
+
+
+// // Promocode_Controller.ts
+// export const HandlePromocodeValidate: RequestHandler = async (req, res) => {
+//   try {
+//     const { code, planId } = req.body;
+
+//     // Validation
+//     if (!code || typeof code !== 'string') {
+//       return res.status(400).json({ 
+//         success: false, 
+//         message: "Valid promo code is required" 
+//       });
+//     }
+
+//     // Find active promo code (case insensitive)
+//     const promo = await PromoCode.findOne({ 
+//       code: code.toUpperCase().trim(), 
+//       isActive: true 
+//     });
+
+//     if (!promo) {
+//       return res.status(404).json({ 
+//         success: false, 
+//         message: "Invalid or inactive promo code" 
+//       });
+//     }
+
+//     // Check expiration
+//     const currentDate = new Date();
+//     if (new Date(promo.validTill) < currentDate) {
+//       return res.status(400).json({ 
+//         success: false, 
+//         message: "Promo code has expired" 
+//       });
+//     }
+
+//     // Optional: Check if promo is valid for specific plan
+//     if (planId) {
+//       // Add plan-specific validation logic here if needed
+//       console.log(`Validating promo ${promo.code} for plan ${planId}`);
+//     }
+
+//     return res.status(200).json({ 
+//       success: true, 
+//       message: "Promo code is valid",
+//       data: promo 
+//     });
+
+//   } catch (err) {
+//     console.error("Promo Validate Error:", err);
+//     return res.status(500).json({ 
+//       success: false, 
+//       message: "Internal server error" 
+//     });
+//   }
+// };

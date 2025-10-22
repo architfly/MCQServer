@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { HandlePromocodeCreate, HandlePromoCodeDelete, HandlePromoCodeEdit, HandlePromocodeGet } from "../Controller/Promocode_Controller/Promocde_Controller";
+import { HandlePromocodeCreate, HandlePromoCodeDelete, HandlePromoCodeEdit, HandlePromocodeGet } from "../Controller/Promocode_Controller/Promocode_Controller";
 
 
 const router=Router();
@@ -10,7 +10,10 @@ router.get("/getAll",HandlePromocodeGet)
 
 router.put("/update/:promoId",HandlePromoCodeEdit);
 
-router.delete("/update/:promoId",HandlePromoCodeDelete);
+router.delete("/delete/:promoId",HandlePromoCodeDelete);
+
+// router.post("/validate", HandlePromocodeValidate);
+
 
 
 export default router;
