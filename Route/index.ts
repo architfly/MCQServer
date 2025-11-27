@@ -1,8 +1,7 @@
 import { Router, Request, Response } from "express";
 import userRoutes from "./userRoutes";
 import courseRoutes from "./courseRoutes";
-import questionRoutes from "./questionRoutes";
-import examRoutes from "./examRoutes";
+
 import promoRoutes from "./PromocodeRoute"
 import testRoutes from "./testRoutes";
 import analyticsRoute from "./analyticsRoute";
